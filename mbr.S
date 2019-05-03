@@ -7,6 +7,8 @@ SECTION MBR vstart=0x7c00
 	mov ss, ax
 	mov fs, ax
 	mov sp, 0x7c00
+	mov ax, 0xb800
+	mov gs, ax ; gs 是什么寄存器
 
 ;清屏
 ;-------------------------
@@ -17,22 +19,21 @@ SECTION MBR vstart=0x7c00
 
 	int 0x10
 
-;获取光标位置
-	mov ah, 3
-	mov bh, 0
+; 输出背景色绿色，前景色红色，并且跳动的字符串”1 MBR“
+	mov byte [gs:0x00], '1'
+	mov byte [gs:0x01], 0xA4
 
-	int 0x10
+	mov byte [gs:0x02], ' '
+	mov byte [gs:0x03], 0xA4
 
-;打印字符串
-	mov ax, message
-	mov bp, ax
+	mov byte [gs:0x04], 'M'
+	mov byte [gs:0x05], 0xA4
 
-	mov cx, 5
-	mov ax,0x1301
+	mov byte [gs:0x06], 'B'
+	mov byte [gs:0x07], 0xA4
 
-	mov bx, 0x2
-
-	int 0x10
+	mov byte [gs:0x08], 'R'
+	mov byte [gs:0x09], 0xA4
 
 	jmp $
 
